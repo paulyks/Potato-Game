@@ -21,9 +21,12 @@ public class SpywareBehaveiour : BasicEnemyBehaviour {
     void Update () {
         goToPlayer(player, range, distanceFromPlayer);
 
-        if (Vector3.Distance(player.transform.position, transform.position) < range)
+        if (player)
         {
-            BasicEnemyBehaviour.foundPlayer = true;
+            if (Vector3.Distance(player.transform.position, transform.position) < range)
+            {
+                BasicEnemyBehaviour.foundPlayer = true;
+            }
         }
     }
 }

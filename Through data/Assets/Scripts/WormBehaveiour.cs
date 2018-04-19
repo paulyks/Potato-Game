@@ -16,6 +16,7 @@ public class WormBehaveiour : BasicEnemyBehaviour {
         setDivider(divider2);
         Invoke("clone", 60);
         setDamage(5);
+        setHpBarHeight(0.35f);
     }
 
     void Update () {

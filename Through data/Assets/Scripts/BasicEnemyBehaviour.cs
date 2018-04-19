@@ -14,10 +14,19 @@ public class BasicEnemyBehaviour : MonoBehaviour {
     public static bool foundPlayer = false;
     private int damage = 0;
 
+    public static bool pause = false;
+
+    private float hpBarHeight = 0.15f;
+
     void Start()
     {
         hpBar = transform.GetChild(0).gameObject;
         initialSizeOfHPBar = (int)hpBar.transform.localScale.x;
+    }
+
+    protected void setHpBarHeight(float height)
+    {
+        hpBarHeight = height;
     }
 
     protected void setDamage(int damage)
@@ -32,24 +41,29 @@ public class BasicEnemyBehaviour : MonoBehaviour {
 
     protected void goToPlayer(GameObject obj, int range, int distanceFromPlayer)
     {
-        if (obj != null)
-        if (Vector3.Distance(obj.transform.position, transform.position) < range || foundPlayer)
+        if (!pause)
         {
-            transform.LookAt(obj.transform.position);
-
-            if (Vector3.Distance(obj.transform.position, transform.position) > distanceFromPlayer)
+            if (obj != null)
             {
-                transform.Translate(Vector3.forward / divider);
-            }
-            else
-            {
-                if (canFire)
+                if (Vector3.Distance(obj.transform.position, transform.position) < range || foundPlayer)
                 {
-                    canFire = false;
-                    obj.GetComponent<PlayerController>().takeDamage(damage);
-                    StartCoroutine(wait(1));
+                    transform.LookAt(obj.transform.position);
+
+                    if (Vector3.Distance(obj.transform.position, transform.position) > distanceFromPlayer)
+                    {
+                        transform.Translate(Vector3.forward / divider);
+                    }
+                    else
+                    {
+                        if (canFire)
+                        {
+                            canFire = false;
+                            obj.GetComponent<PlayerController>().takeDamage(damage);
+                            StartCoroutine(wait(1));
+                        }
+                    }
                 }
-            }
+            }  
         }
     }
 
@@ -59,13 +73,13 @@ public class BasicEnemyBehaviour : MonoBehaviour {
         canFire = true;
     }
 
-    public void takeDamage(int damage)
+    public void takeDamage(int damage, PlayerController player)
     {
         hp -= damage;
-        hpBar.transform.localScale = new Vector3((initialSizeOfHPBar * (hp / 100)), 0.35f, 0.35f);
-        print(gameObject.name + " " + hp);
+        hpBar.transform.localScale = new Vector3((initialSizeOfHPBar * (hp / 100)), hpBarHeight, 0.001f);
         if (hp <= 0)
         {
+            player.destroyedEnemy();
             dead();
         }
     }
