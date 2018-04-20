@@ -30,6 +30,7 @@ public class PlayerController : MonoBehaviour {
 
     private bool pause = false;
     private bool moving = false;
+    private bool stunned = false;
 
     void Start () {
         animator = GetComponent<Animator>();
@@ -54,6 +55,11 @@ public class PlayerController : MonoBehaviour {
             ambientSound.enabled = false;
         }
 
+        if (!StaticVariables.sfx)
+        {
+            laser.GetComponent<AudioSource>().enabled = false;
+        }
+
         Invoke("regeneration", 1);
     }
 
@@ -68,7 +74,7 @@ public class PlayerController : MonoBehaviour {
         stepSound = StaticVariables.sfx;
 
         topCamera.transform.position = new Vector3(transform.position.x, 40, transform.position.z);
-        if (!pause)
+        if (!pause && !stunned)
         {
             animator.SetInteger("VerticalMovement", 0);
             animator.SetInteger("HorizontalMovement", 0);
@@ -175,6 +181,17 @@ public class PlayerController : MonoBehaviour {
         print(newHP);
     }
 
+    private void win()
+    {
+        pause = true;
+        gameMenuPanel.SetActive(true);
+        gameMenuPanel.transform.GetChild(0).GetComponent<Text>().text = "You Won !";
+        Cursor.visible = true;
+        animator.SetInteger("HorizontalMovement", 0);
+        animator.SetInteger("VerticalMovement", 0);
+        runSound.enabled = false;
+    }
+
     public void takeDamage(int damage)
     {
         hp -= damage;
@@ -186,11 +203,25 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-    private void dead()
+    public void stun(int seconds)
     {
-        Destroy(this.gameObject);
+        stunned = true;
+        Invoke("endStun", seconds);
     }
 
+    private void endStun()
+    {
+        stunned = false;
+    }
+
+    private void dead()
+    {
+        pause = true;
+        gameMenuPanel.SetActive(true);
+        gameMenuPanel.transform.GetChild(0).GetComponent<Text>().text = "Game Over !";
+        Cursor.visible = true;
+        Destroy(this.gameObject);
+    }
 
     IEnumerator wait(float time)
     {
@@ -211,6 +242,12 @@ public class PlayerController : MonoBehaviour {
             hp += 1;
             changedHP(hp);
         }
+
+        if (EnemyCounter.remainedEnemies == 0)
+        {
+            win();
+        }
+
         Invoke("regeneration", 1);
     }
 }

@@ -28,10 +28,5 @@ public class EnemySpawner : MonoBehaviour {
                 clone.name = enemies[j].name;
             }
         }
-		
-	}
-	
-	void Update () {
-		
 	}
 }
