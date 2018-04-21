@@ -63,7 +63,11 @@ public class BasicEnemyBehaviour : MonoBehaviour {
                         }
                     }
                 }
-            }  
+            }
+            else
+            {
+                GetComponent<Rigidbody>().isKinematic = true;
+            }
         }
     }
 

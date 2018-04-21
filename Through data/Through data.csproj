@@ -303,6 +303,7 @@
     <Compile Include="Assets\Scripts\EnemyCounter.cs" />
     <Compile Include="Assets\Scripts\EnemySpawner.cs" />
     <Compile Include="Assets\Scripts\GameButtons.cs" />
+    <Compile Include="Assets\Scripts\LegendButtons.cs" />
     <Compile Include="Assets\Scripts\MenuButtons.cs" />
     <Compile Include="Assets\Scripts\OptionButtons.cs" />
     <Compile Include="Assets\Scripts\PlayerController.cs" />
