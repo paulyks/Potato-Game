@@ -38,7 +38,7 @@ public class PlayerController : MonoBehaviour {
         cameraPoint = transform.GetChild(0).gameObject;
         laser = playerCamera.transform.GetChild(1).gameObject;
 
-        hpBarX = 150;
+        hpBarX = 155;
         initialWidth = 300;
 
         ambientSound = playerCamera.GetComponent<AudioSource>();
@@ -174,10 +174,10 @@ public class PlayerController : MonoBehaviour {
     private void changedHP(float newHP)
     {
         hpBarWidth = newHP / 100;
-        hpBarX = 10 + (newHP / 2) * (initialWidth / 100);
+        hpBarX = 15 + (newHP / 2) * (initialWidth / 100);
 
         hpBar.transform.localScale = new Vector3(hpBarWidth, 1, 1);
-        hpBar.rectTransform.anchoredPosition = new Vector3(hpBarX, -30, 0);
+        hpBar.rectTransform.anchoredPosition = new Vector3(hpBarX, 0, 0);
         print(newHP);
     }
 
@@ -195,6 +195,10 @@ public class PlayerController : MonoBehaviour {
     public void takeDamage(int damage)
     {
         hp -= damage;
+        if (hp <= 0)
+        {
+            hp = 0;
+        }
         changedHP(hp);
 
         if (hp <= 0)

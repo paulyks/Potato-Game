@@ -39,6 +39,8 @@ public class OptionButtons : MonoBehaviour {
         {
             sfxButton.GetComponent<Image>().sprite = SFX_Off;
         }
+
+        scrollbar.value = StaticVariables.mouseSensibility;
     }
 
     public void back()
