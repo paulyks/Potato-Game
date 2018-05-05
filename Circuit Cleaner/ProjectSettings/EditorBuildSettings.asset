@@ -17,3 +17,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Legend.unity
     guid: f3b8af543a6bc71478555a3d4502b66f
+  - enabled: 1
+    path: Assets/SelectGameMode.unity
+    guid: 51d608bf7b397274d87aab1bc2aaf6f7

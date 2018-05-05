@@ -25,12 +25,15 @@ public class PlayerController : MonoBehaviour {
     private bool canFire = true;
     private GameObject cameraPoint;
     private bool stepSound;
+    public GameObject scripts;
 
     //private int raycastRange = 5000;
 
     private bool pause = false;
     private bool moving = false;
     private bool stunned = false;
+
+    public bool God = false;
 
     void Start () {
         animator = GetComponent<Animator>();
@@ -194,16 +197,20 @@ public class PlayerController : MonoBehaviour {
 
     public void takeDamage(int damage)
     {
-        hp -= damage;
-        if (hp <= 0)
+        if (!God)
         {
-            hp = 0;
-        }
-        changedHP(hp);
+            hp -= damage;
+            if (hp <= 0)
+            {
+                hp = 0;
+            }
+            changedHP(hp);
 
-        if (hp <= 0)
-        {
-            dead();
+            if (hp <= 0)
+            {
+                scripts.GetComponent<SurvivalScore>().endGame();
+                dead();
+            }
         }
     }
 

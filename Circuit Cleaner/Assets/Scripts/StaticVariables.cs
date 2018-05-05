@@ -12,4 +12,6 @@ public class StaticVariables : MonoBehaviour {
     public static bool sfx = true;
     public static bool music = true;
     public static float mouseSensibility = 0.5f;
+    //public static string gameMode = "normal";
+    public static string gameMode = "survival";
 }

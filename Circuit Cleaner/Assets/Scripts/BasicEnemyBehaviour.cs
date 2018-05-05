@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class BasicEnemyBehaviour : MonoBehaviour {
 
@@ -18,11 +19,18 @@ public class BasicEnemyBehaviour : MonoBehaviour {
 
     private float hpBarHeight = 0.15f;
 
+    private GameObject[] myAllies;
+    private bool allyNearby = false;
+
     void Start()
     {
         hpBar = transform.GetChild(0).gameObject;
         initialSizeOfHPBar = (int)hpBar.transform.localScale.x;
+
+        myAllies = GameObject.FindGameObjectsWithTag("Enemy");
     }
+
+    
 
     protected void setHpBarHeight(float height)
     {
@@ -47,21 +55,55 @@ public class BasicEnemyBehaviour : MonoBehaviour {
             {
                 if (Vector3.Distance(obj.transform.position, transform.position) < range || foundPlayer)
                 {
-                    transform.LookAt(obj.transform.position);
+                    allyNearby = false;
 
-                    if (Vector3.Distance(obj.transform.position, transform.position) > distanceFromPlayer)
+                    if (StaticVariables.gameMode == "normal")
                     {
-                        transform.Translate(Vector3.forward / divider);
+                        allyNearby = true;
                     }
-                    else
+
+                    myAllies = GameObject.FindGameObjectsWithTag("Enemy");
+
+                    if (StaticVariables.gameMode == "survival")
                     {
-                        if (canFire)
+                        if (myAllies != null)
                         {
-                            canFire = false;
-                            obj.GetComponent<PlayerController>().takeDamage(damage);
-                            StartCoroutine(wait(1));
+                            try
+                            {
+                                for (int i = 0; i < myAllies.Length; i++)
+                                {
+                                    if (myAllies[i].gameObject.name != this.name)
+                                    {
+                                        if (Vector3.Distance(transform.position, myAllies[i].transform.position) < 7)
+                                        {
+                                            allyNearby = true;
+                                        }
+                                    }
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                print("ok");
+                            }
                         }
+                        
                     }
+
+                        transform.LookAt(obj.transform.position);
+
+                        if (Vector3.Distance(obj.transform.position, transform.position) > distanceFromPlayer && allyNearby)
+                        {
+                            transform.Translate(Vector3.forward / divider);
+                        }
+                        else if (Vector3.Distance(obj.transform.position, transform.position) < distanceFromPlayer)
+                        {
+                            if (canFire)
+                            {
+                                canFire = false;
+                                obj.GetComponent<PlayerController>().takeDamage(damage);
+                                StartCoroutine(wait(1));
+                            }
+                        }
                 }
             }
             else
